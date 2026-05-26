@@ -1,0 +1,386 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9f7f4;
+  color: #333;
+  line-height: 1.6;
+}
+
+.app-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.app-header {
+  background: #e67e22;
+  color: white;
+  padding: 24px 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.app-header p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Form Card */
+.form-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+}
+
+.form-card h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #e67e22;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-group select:focus,
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #e67e22;
+}
+
+.form-group input[type="file"] {
+  font-size: 14px;
+}
+
+/* Submit Button */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: #e67e22;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover {
+  background: #d35400;
+}
+
+.btn-submit:active {
+  transform: scale(0.98);
+}
+
+/* Success Message */
+.success-message {
+  margin-top: 16px;
+  padding: 12px;
+  background: #ecfdf5;
+  color: #065f46;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Reports Section */
+.reports-section h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #444;
+}
+
+.reports-section .count {
+  background: #e67e22;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.empty-state .icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+/* Report Card */
+.report-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 16px;
+}
+
+.report-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.report-card .dog-type-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-stray {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-injured {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-aggressive {
+  background: #fce7f3;
+  color: #9d174d;
+}
+
+.report-card .card-image {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.report-card .card-location {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.report-card .card-description {
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.report-card .card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #999;
+}
+
+.report-card .status-badge {
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.status-open {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-rescued {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* No reports */
+.no-reports {
+  text-align: center;
+  padding: 30px;
+  color: #999;
+  font-style: italic;
+}
+
+/* View Toggle */
+.view-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #e67e22;
+  background: white;
+  color: #e67e22;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-btn.active {
+  background: #e67e22;
+  color: white;
+}
+
+.toggle-btn:hover {
+  opacity: 0.9;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.btn-rescue {
+  flex: 1;
+  padding: 10px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-rescue:hover {
+  background: #15803d;
+}
+
+.btn-shelter {
+  flex: 1;
+  padding: 10px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-shelter:hover {
+  background: #1d4ed8;
+}
+
+.btn-reopen {
+  padding: 8px 16px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-reopen:hover {
+  background: #d97706;
+}
+
+/* GPS Button */
+.btn-gps {
+  padding: 12px 16px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-gps:hover {
+  background: #d97706;
+}
+
+.btn-gps:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Map Link */
+.maps-link {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 13px;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.maps-link:hover {
+  text-decoration: underline;
+}
+
+/* Mini Map on Report Cards */
+.mini-map-container {
+  height: 180px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+}
+
+.mini-map {
+  height: 100%;
+  width: 100%;
+}
+
+.btn-logout {
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.btn-logout:hover {
+  background: rgba(255,255,255,0.3);
+}
