@@ -109,6 +109,8 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage('');
+
     let finalLocation = location;
     if (coords && location.startsWith('Lat:')) {
       try {
@@ -117,6 +119,7 @@ function App() {
         if (geoData?.display_name) finalLocation = geoData.display_name;
       } catch {}
     }
+
     const formData = new FormData();
     formData.append('dogType', dogType);
     formData.append('location', finalLocation);
@@ -124,46 +127,56 @@ function App() {
     if (coords) { formData.append('latitude', coords.latitude); formData.append('longitude', coords.longitude); }
     if (photo) formData.append('photo', photo);
 
-    const response = await fetch('https://straywatch-backend.onrender.com/reports', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData
-    });
+    try {
+      const response = await fetch('https://straywatch-backend.onrender.com/reports', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
 
-    if (response.ok) {
-      setMessage('Report submitted. Thank you!');
-      setLocation('');
-      setDescription('');
-      setPhoto(null);
-      setCoords(null);
-      fetchReports();
-      setTimeout(() => setMessage(''), 4000);
-    } else if (response.status === 409) {
       const data = await response.json();
-      const proceed = window.confirm(data.message + '\n\nClick OK to submit anyway, or Cancel to go back.');
-      if (proceed) {
-        const forceData = new FormData();
-        forceData.append('dogType', dogType);
-        forceData.append('location', finalLocation);
-        forceData.append('description', description);
-        if (photo) forceData.append('photo', photo);
-        const forceResponse = await fetch('https://straywatch-backend.onrender.com/reports', {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: forceData
-        });
-        if (forceResponse.ok) {
-          setMessage('Report submitted. Thank you!');
-          setLocation('');
-          setDescription('');
-          setPhoto(null);
-          setCoords(null);
-          fetchReports();
-          setTimeout(() => setMessage(''), 4000);
+
+      if (response.ok) {
+        setMessage('Report submitted. Thank you!');
+        setLocation('');
+        setDescription('');
+        setPhoto(null);
+        setCoords(null);
+        fetchReports();
+        setTimeout(() => setMessage(''), 4000);
+      } else if (response.status === 409) {
+        const proceed = window.confirm(data.message + '\n\nClick OK to submit anyway, or Cancel to go back.');
+        if (proceed) {
+          const forceData = new FormData();
+          forceData.append('dogType', dogType);
+          forceData.append('location', finalLocation);
+          forceData.append('description', description);
+          if (photo) forceData.append('photo', photo);
+          const forceResponse = await fetch('https://straywatch-backend.onrender.com/reports', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: forceData
+          });
+          if (forceResponse.ok) {
+            setMessage('Report submitted. Thank you!');
+            setLocation('');
+            setDescription('');
+            setPhoto(null);
+            setCoords(null);
+            fetchReports();
+            setTimeout(() => setMessage(''), 4000);
+          } else {
+            const forceErr = await forceResponse.json();
+            setMessage(forceErr.error || 'Something went wrong.');
+          }
         }
+      } else {
+        setMessage(data.error || 'Something went wrong.');
+        console.error('Submit error:', data);
       }
-    } else {
-      setMessage('Something went wrong.');
+    } catch (err) {
+      setMessage('Network error. Please try again.');
+      console.error('Network error:', err);
     }
   };
 
@@ -217,7 +230,7 @@ function App() {
         {typeEmoji(report.dogType)}
         <span className={`dog-type-badge ${getBadgeClass(report.dogType)}`}>{report.dogType}</span>
       </div>
-      {report.imageUrl && <img src={`https://straywatch-backend.onrender.com${report.imageUrl}`} alt="Dog" className="card-image" />}
+      {report.imageUrl && <img src={report.imageUrl} alt="Dog" className="card-image" />}
       <div className="card-location">📍 {report.location} <a href={mapsLink(report)} target="_blank" rel="noreferrer" className="maps-link">🗺️ Map</a></div>
       {hasCoords(report) && (
         <div className="mini-map-container">
@@ -319,7 +332,7 @@ function App() {
             <div className="form-group"><label>Dog Type</label><select value={dogType} onChange={(e) => setDogType(e.target.value)}><option value="stray">🐕 Stray</option><option value="injured">🩹 Injured</option><option value="aggressive">⚠️ Aggressive</option></select></div>
             <div className="form-group"><label>Location</label><div style={{ display: 'flex', gap: 8 }}><input type="text" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Where?" required style={{ flex: 1 }} /><button type="button" onClick={getLocation} className="btn-gps" disabled={gpsLoading}>{gpsLoading ? '...' : '📍 GPS'}</button></div></div>
             <div className="form-group"><label>Description</label><textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe..." required rows={4} /></div>
-            <div className="form-group"><label>Photo</label><input type="file" accept="image/*" onChange={(e) => setPhoto(e.target.files[0])}  /></div>
+            <div className="form-group"><label>Photo</label><input type="file" accept="image/*" onChange={(e) => setPhoto(e.target.files[0])} /></div>
             <button type="submit" className="btn-submit">Submit Report</button>
           </form>
           {message && <div className="success-message">{message}</div>}
