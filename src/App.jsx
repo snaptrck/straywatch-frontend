@@ -23,7 +23,7 @@ function App() {
   const [authError, setAuthError] = useState('');
 
   const fetchReports = async () => {
-    const response = await fetch('http://localhost:3000/reports', {
+    const response = await fetch('https://straywatch-backend.onrender.com/reports', {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
     const data = await response.json();
@@ -40,7 +40,7 @@ function App() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setAuthError('');
-    const response = await fetch('http://localhost:3000/auth/login', {
+    const response = await fetch('https://straywatch-backend.onrender.com/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: authEmail, password: authPassword })
@@ -60,7 +60,7 @@ function App() {
   const handleSignup = async (e) => {
     e.preventDefault();
     setAuthError('');
-    const response = await fetch('http://localhost:3000/auth/signup', {
+    const response = await fetch('https://straywatch-backend.onrender.com/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: authEmail, password: authPassword, role: authRole })
@@ -124,7 +124,7 @@ function App() {
     if (coords) { formData.append('latitude', coords.latitude); formData.append('longitude', coords.longitude); }
     if (photo) formData.append('photo', photo);
 
-    const response = await fetch('http://localhost:3000/reports', {
+    const response = await fetch('https://straywatch-backend.onrender.com/reports', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: formData
@@ -147,7 +147,7 @@ function App() {
         forceData.append('location', finalLocation);
         forceData.append('description', description);
         if (photo) forceData.append('photo', photo);
-        const forceResponse = await fetch('http://localhost:3000/reports', {
+        const forceResponse = await fetch('https://straywatch-backend.onrender.com/reports', {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` },
           body: forceData
@@ -168,7 +168,7 @@ function App() {
   };
 
   const updateStatus = async (id, newStatus) => {
-    const response = await fetch(`http://localhost:3000/reports/${id}`, {
+    const response = await fetch(`https://straywatch-backend.onrender.com/reports/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ status: newStatus })
@@ -178,7 +178,7 @@ function App() {
 
   const handleFlag = async (reportId) => {
     if (!confirm('Flag this report as inappropriate or not a real dog?')) return;
-    const response = await fetch(`http://localhost:3000/reports/${reportId}/flag`, {
+    const response = await fetch(`https://straywatch-backend.onrender.com/reports/${reportId}/flag`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
     });
@@ -217,7 +217,7 @@ function App() {
         {typeEmoji(report.dogType)}
         <span className={`dog-type-badge ${getBadgeClass(report.dogType)}`}>{report.dogType}</span>
       </div>
-      {report.imageUrl && <img src={`http://localhost:3000${report.imageUrl}`} alt="Dog" className="card-image" />}
+      {report.imageUrl && <img src={`https://straywatch-backend.onrender.com${report.imageUrl}`} alt="Dog" className="card-image" />}
       <div className="card-location">📍 {report.location} <a href={mapsLink(report)} target="_blank" rel="noreferrer" className="maps-link">🗺️ Map</a></div>
       {hasCoords(report) && (
         <div className="mini-map-container">
