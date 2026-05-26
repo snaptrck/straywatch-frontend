@@ -319,7 +319,7 @@ function App() {
             <div className="form-group"><label>Dog Type</label><select value={dogType} onChange={(e) => setDogType(e.target.value)}><option value="stray">🐕 Stray</option><option value="injured">🩹 Injured</option><option value="aggressive">⚠️ Aggressive</option></select></div>
             <div className="form-group"><label>Location</label><div style={{ display: 'flex', gap: 8 }}><input type="text" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Where?" required style={{ flex: 1 }} /><button type="button" onClick={getLocation} className="btn-gps" disabled={gpsLoading}>{gpsLoading ? '...' : '📍 GPS'}</button></div></div>
             <div className="form-group"><label>Description</label><textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe..." required rows={4} /></div>
-            <div className="form-group"><label>Photo</label><input type="file" accept="image/*" capture="environment" onChange={(e) => setPhoto(e.target.files[0])} /></div>
+            <div className="form-group"><label>Photo</label><input type="file" accept="image/*" onChange={(e) => setPhoto(e.target.files[0])}  /></div>
             <button type="submit" className="btn-submit">Submit Report</button>
           </form>
           {message && <div className="success-message">{message}</div>}
