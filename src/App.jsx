@@ -120,18 +120,52 @@ function App() {
       } catch {}
     }
 
-    const formData = new FormData();
-    formData.append('dogType', dogType);
-    formData.append('location', finalLocation);
-    formData.append('description', description);
-    if (coords) { formData.append('latitude', coords.latitude); formData.append('longitude', coords.longitude); }
-    if (photo) formData.append('photo', photo);
+    let imageUrl = null;
+
+    // Upload directly to Cloudinary if photo selected
+    if (photo) {
+      setMessage('Uploading photo...');
+      const cloudFormData = new FormData();
+      cloudFormData.append('file', photo);
+      cloudFormData.append('upload_preset', 'straywatch_unsigned');
+      cloudFormData.append('folder', 'straywatch');
+
+      try {
+        const cloudResponse = await fetch(
+          'https://api.cloudinary.com/v1_1/daqxmhcms/image/upload',
+          { method: 'POST', body: cloudFormData }
+        );
+        const cloudData = await cloudResponse.json();
+        if (cloudData.secure_url) {
+          imageUrl = cloudData.secure_url;
+        } else {
+          setMessage('Photo upload failed. Please try again.');
+          return;
+        }
+      } catch (err) {
+        setMessage('Photo upload failed. Please try again.');
+        return;
+      }
+    }
+
+    // Submit report to backend as JSON
+    const reportData = {
+      dogType,
+      location: finalLocation,
+      description,
+      imageUrl,
+      latitude: coords?.latitude || null,
+      longitude: coords?.longitude || null
+    };
 
     try {
       const response = await fetch('https://straywatch-backend.onrender.com/reports', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(reportData)
       });
 
       const data = await response.json();
@@ -147,15 +181,13 @@ function App() {
       } else if (response.status === 409) {
         const proceed = window.confirm(data.message + '\n\nClick OK to submit anyway, or Cancel to go back.');
         if (proceed) {
-          const forceData = new FormData();
-          forceData.append('dogType', dogType);
-          forceData.append('location', finalLocation);
-          forceData.append('description', description);
-          if (photo) forceData.append('photo', photo);
           const forceResponse = await fetch('https://straywatch-backend.onrender.com/reports', {
             method: 'POST',
-            headers: { Authorization: `Bearer ${token}` },
-            body: forceData
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ ...reportData, force: true })
           });
           if (forceResponse.ok) {
             setMessage('Report submitted. Thank you!');
@@ -166,17 +198,15 @@ function App() {
             fetchReports();
             setTimeout(() => setMessage(''), 4000);
           } else {
-            const forceErr = await forceResponse.json();
-            setMessage(forceErr.error || 'Something went wrong.');
+            const fe = await forceResponse.json();
+            setMessage(fe.error || 'Something went wrong.');
           }
         }
       } else {
         setMessage(data.error || 'Something went wrong.');
-        console.error('Submit error:', data);
       }
     } catch (err) {
       setMessage('Network error. Please try again.');
-      console.error('Network error:', err);
     }
   };
 
